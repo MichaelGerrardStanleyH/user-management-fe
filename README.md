@@ -2,7 +2,7 @@
 
 ### Feature Integrate
 - SignIn dan SignUp
-- Logout
+- SignOut
 - Member List Page
 - Search Member
 - Create Member dengan ReportsTo
