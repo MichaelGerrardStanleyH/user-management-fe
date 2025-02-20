@@ -8,6 +8,7 @@ import Main from "./pages/Main";
 import MemberList from "./pages/MemberList";
 import CreateMember from "./pages/CreateMember";
 import MemberDetails from "./pages/MemberDetails";
+import UpdateMember from "./pages/UpdateMember";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <CreateMember />,
+  },
+  {
+    path: "/update",
+    element: <UpdateMember />,
   },
   {
     path: "/member/details",

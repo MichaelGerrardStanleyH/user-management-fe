@@ -13,7 +13,7 @@ export default function Header() {
         <Container>
           <Navbar>
             <Container>
-              <Navbar.Brand href="/">Danamas Insan Kreasi Andalan</Navbar.Brand>
+              <Navbar.Brand href="/">User Management</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="ms-auto">

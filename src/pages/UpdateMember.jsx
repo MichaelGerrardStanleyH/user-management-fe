@@ -1,0 +1,126 @@
+import { React, useState, useEffect } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import { useLocation, useNavigate } from "react-router-dom";
+
+import apiMember from "../api/apiMember";
+import { data } from "react-router-dom";
+import HeaderMain from "../component/headermain/HeaderMain";
+
+export default function UpdateMember() {
+  let { state } = useLocation();
+
+  const [allMember, setAllMember] = useState([]);
+  const [member, setMember] = useState({});
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    apiMember.getById(state.memberId).then((data) => {
+      setMember(data);
+    });
+
+    apiMember.list().then((data) => {
+      setAllMember(data);
+    });
+  }, []);
+
+  const [dto, setDto] = useState({
+    name: "",
+    position: "",
+    organizationId: 1,
+    reportsToId: null,
+  });
+
+  const handleChangeName = (event) => {
+    setDto({
+      ...dto,
+      ["name"]: event.target.value,
+    });
+  };
+
+  const handleChangePosition = (event) => {
+    setDto({
+      ...dto,
+      ["position"]: event.target.value,
+    });
+  };
+
+  const handleChangeReportsTo = (event) => {
+    setDto({
+      ...dto,
+      ["reportsToId"]: parseInt(event.target.value),
+    });
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+
+    apiMember
+      .update(state.memberId, dto)
+      .then((data) => {
+        console.log("data has been saved");
+      })
+      .catch((error) => console.log(error));
+
+    navigate(-1);
+  };
+
+  const onClickBanner = () => {
+    navigate(-1);
+  };
+
+  return (
+    <>
+      <HeaderMain onClick={onClickBanner} />
+      <div className="container">
+        <h1 style={{ marginTop: "15px" }}>Update Member Page</h1>
+
+        <div className="container">
+          <Form onSubmit={onSubmit}>
+            <Form.Group className="mb-3" controlId="formBasicName">
+              <Form.Label>Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter name"
+                onChange={handleChangeName}
+                defaultValue={member["name"]}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Position</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter positon"
+                className="mb-3"
+                controlId="formBasicPosition"
+                onChange={handleChangePosition}
+                defaultValue={member["position"]}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicReportsTo">
+              <Form.Label>Reports To</Form.Label>
+              <Form.Select
+                aria-label="Default select example"
+                style={{ marginBottom: "20px" }}
+                onChange={handleChangeReportsTo}
+                value={member["reportsTo"] ? member["reportsTo"]["id"] : null}
+              >
+                <option>Select Reports To</option>
+                {allMember.map((obj) => {
+                  return <option value={obj["id"]}>{obj["name"]}</option>;
+                })}
+              </Form.Select>
+            </Form.Group>
+
+            <Button variant="primary" type="submit">
+              Submit
+            </Button>
+          </Form>
+        </div>
+      </div>
+    </>
+  );
+}

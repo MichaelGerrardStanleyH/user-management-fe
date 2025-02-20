@@ -57,8 +57,9 @@ const getById = async (id) => {
 };
 
 const update = async (id, payload) => {
+  
   try {
-    const result = await axios.put(`${config.host}/members/${id}`);
+    const result = await axios.put(`${config.host}/members/${id}`, payload);
     return result.data;
   } catch (error) {
     console.log(error);

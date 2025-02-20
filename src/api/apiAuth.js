@@ -13,7 +13,6 @@ const signin = async (payload) => {
 };
 
 const signUp = async (payload) => {
-  // const FormData = require("form-data");
   const form = new FormData();
   form.append("name", payload["dto"]["name"]);
   form.append("position", payload["dto"]["position"]);

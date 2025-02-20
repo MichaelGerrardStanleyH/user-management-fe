@@ -12,9 +12,6 @@ export default function MemberDetails(props) {
 
   const [member, setMember] = useState({});
 
-  const onClickBanner = () => {
-    navigate(-2);
-  };
 
   useEffect(() => {
     apiMember.getById(state.memberId).then((data) => {
@@ -28,7 +25,7 @@ export default function MemberDetails(props) {
 
   return (
     <>
-      <HeaderMain onClick={onClickBanner} />
+      <HeaderMain/>
       <div className="container">
         <h1 style={{marginTop: "15px"}}>Member Detail</h1>
         <div className="container">

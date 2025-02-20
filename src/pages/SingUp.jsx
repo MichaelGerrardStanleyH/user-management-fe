@@ -12,8 +12,6 @@ export default function SingUp() {
 
   const [member, setmember] = useState([]);
 
-  const [img, setImage] = useState();
-
   useEffect(() => {
     apiMember.list().then((data) => {
       setmember(data);
@@ -52,8 +50,6 @@ export default function SingUp() {
       ...dto,
       ["password"]: event.target.value,
     });
-
-    console.log(dto);
   };
 
   const handleChangePosition = (event) => {
@@ -61,8 +57,6 @@ export default function SingUp() {
       ...dto,
       ["position"]: event.target.value,
     });
-
-    console.log(dto);
   };
 
   const handleChangeReportsTo = (event) => {
@@ -70,8 +64,6 @@ export default function SingUp() {
       ...dto,
       ["reportsToId"]: parseInt(event.target.value),
     });
-
-    console.log(dto);
   };
 
   const onSubmit = (event) => {
@@ -79,16 +71,13 @@ export default function SingUp() {
 
     const payload = {
       dto: dto,
-      image: img,
     };
 
-    console.log(payload);
 
     apiAuth
       .signUp(payload)
       .then((data) => {
         console.log("data has been saved");
-        console.log(data);
         if(data == "Success Create User"){
           navigate("/signin");
         }
@@ -162,18 +151,10 @@ export default function SingUp() {
               onChange={handleChangeReportsTo}
             >
               <option>Select Reports To</option>
-              {member.map((obj) => {
+              {(member || []).map((obj) => {
                 return <option value={obj["id"]}>{obj["name"]}</option>;
               })}
             </Form.Select>
-          </Form.Group>
-
-          <Form.Group controlId="formFile" className="mb-3">
-            <Form.Label>Default file input example</Form.Label>
-            <Form.Control
-              type="file"
-              onChange={(e) => setImage(e.target.files[0])}
-            />
           </Form.Group>
 
           <Button variant="primary" type="submit">

@@ -23,50 +23,51 @@ export default function MemberList() {
     });
   }, []);
 
+  const onClickUpdate = (id) => () => {
+    console.log(id);
 
-  const onClickDetail = (id) => () => {
-    navigate("details", { state: { memberId: id } });
+    navigate("/update", { state: { memberId: id } });
   };
 
   const onClickBanner = () => {
     navigate(-1);
   };
 
+  const onClickDelete = (id) => (event) => {
+     apiMember.deleteMember(id).then((data) => {
+          setmember(data);
+        });
+  }
 
   const handleChangeSearch = (event) => {
     setName(event.target.value);
-
   };
 
   const onSubmit = (event) => {
-      event.preventDefault();
+    event.preventDefault();
 
-      if(name == "" || name == null){
-        apiMember.list().then((data) => {
-          setmember(data);
-        });
-
-      }else{
-        
-        apiMember
+    if (name == "" || name == null) {
+      apiMember.list().then((data) => {
+        setmember(data);
+      });
+    } else {
+      apiMember
         .getByNameContains(name)
         .then((data) => {
           setmember(data);
         })
         .catch((error) => console.log(error));
-      }
-
-      
-    };
+    }
+  };
 
   return (
     <>
       <HeaderMain onClick={onClickBanner} />
 
       <div className="container">
-        <h1 style={{marginTop: "15px"}}>Member List Page</h1>
+        <h1 style={{ marginTop: "15px" }}>Member List Page</h1>
 
-        <Row style={{marginTop: "30px"}}>
+        <Row style={{ marginTop: "30px" }}>
           <Col>
             <InputGroup className="mb-3" onChange={handleChangeSearch}>
               <Form.Control
@@ -74,7 +75,11 @@ export default function MemberList() {
                 aria-label="Recipient's username"
                 aria-describedby="basic-addon2"
               />
-              <Button variant="outline-secondary" id="button-addon2" onClick={onSubmit}>
+              <Button
+                variant="outline-secondary"
+                id="button-addon2"
+                onClick={onSubmit}
+              >
                 Button
               </Button>
             </InputGroup>
@@ -90,10 +95,11 @@ export default function MemberList() {
               <th>name</th>
               <th>position</th>
               <th>reportsTo</th>
+              <th>action</th>
             </tr>
           </thead>
           <tbody>
-            {member.map((obj) => {
+            {(member || []).map((obj) => {
               return (
                 <tr>
                   <td>
@@ -107,10 +113,22 @@ export default function MemberList() {
                   </td>
                   <td>
                     {obj["reportsTo"] ? (
-                      <text>{obj["name"]}</text>
+                      <text>{obj["reportsTo"]["name"]}</text>
                     ) : (
                       <text>-</text>
                     )}
+                  </td>
+                  <td>
+                    <Button
+                      variant="warning"
+                      className="mx-1 my-1"
+                      onClick={onClickUpdate(obj["id"])}
+                    >
+                      Update
+                    </Button>
+                    <Button variant="danger" className="mx-1 my-1" onClick={onClickDelete(obj["id"])}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               );
